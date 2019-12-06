@@ -1,6 +1,6 @@
 <?php
 
-class UserValidator{
+class AdminValidator{
 
     /** @var array $data */
     private $data;
@@ -8,7 +8,7 @@ class UserValidator{
     /** @var array $errors */
     private $errors = [];
 
-    /** @var UserTable $table */
+    /** @var AdminTable $table */
     private $table;
 
     /** @var int|null $id */
@@ -16,10 +16,10 @@ class UserValidator{
 
     /** hydrade 
      * @param array $data - donnée venant d'un formulaire
-     * @param UserTable $table - donnée venant de la bdd
-     * @param int|null $id - l'id de l'utiliateur courant
+     * @param AdminTable $table - donnée venant de la bdd
+     * @param int|null $id - l'id de l'administrateur courant
      */
-    public function __construct(array $data, UserTable $table, ?int $id = null)
+    public function __construct(array $data, AdminTable $table, ?int $id = null)
     {
         $this->data     = $data;
         $this->table    = $table;
@@ -43,6 +43,7 @@ class UserValidator{
                 $this->errors['password2'][] = 'Les deux mots de passe sont différents .';
             }
         }
+        
     }
 
     /** control
@@ -53,17 +54,19 @@ class UserValidator{
         if(array_key_exists('name',$this->data)){
             if(!empty($this->data['name']) && isset($this->data['name'])){
                 if(!preg_match("/^[a-zA-Z0-9éèêôâïà]{2,}(.+)?$/", $this->data['name'])){
+                    //$this->errors['name'][] = "Pas d'espace en premier caratère dans ce champ";
                     $this->errors['name'][] = "L'utilisateur doit contenir minimun 2 caratères";
                 }
             }
             if(empty($this->data['name'])){
-                $this->errors['name'][]     = "Le champs de l'utilisateur est vide";
+                $this->errors['name'][]     = "Le champs de votre de nom est vide";
             }
         }
 
         if(array_key_exists('email',$this->data)){
             if(!empty($this->data['email']) && isset($this->data['email'])){
                 if(!preg_match("/^[a-zA-Z][a-zA-Z0-9._-]{1,19}@[a-z]{4,7}\.[a-z]{2,3}$/", $this->data['email'])){
+                    //$this->errors['email'][] = "on veut pas d'espace en premier caratère dans ce champ";
                     $this->errors['email'][] = "vous devez écrire un mail correcte, exemple : ok@laposte.fr";
                 }
             }
@@ -75,7 +78,7 @@ class UserValidator{
         if(array_key_exists('password',$this->data)){
             if(!empty($this->data['password']) && isset($this->data['password'])){
                 if(!preg_match("/^[a-zA-Z0-9]{2,}(.+)?$/", $this->data['password'])){
-                    $this->errors['password'][] = "on veut pas d'espace en premier caratère dans le mot de passe";
+                    //$this->errors['password'][] = "on veut pas d'espace en premier caratère dans le mot de passe";
                     $this->errors['password'][] = "Le mot de passe doit contenir minimun 2 caratères";
                 }
             }

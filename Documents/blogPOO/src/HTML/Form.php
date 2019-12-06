@@ -23,7 +23,17 @@ class Form{
     public function inpute(string $key, string $label = null) : string
     {
         $value = $this->getValue($key);
-        $type = (($key === 'password') ? 'password' : (($key === 'user_i') ? 'hidden' : 'text'));
+        //$type = (($key === 'password') ? 'password' : (($key === 'admin_i') ? 'hidden' : 'text'));
+        if($key === 'password' || $key === 'password2'){
+            $type = 'password';
+        }
+        elseif($key === 'admin_i' || $key === 'user_i' || $key === 'id_post' || $key === 'slug_post' || $key === 'author'){
+            $type = 'hidden';
+        }
+        else{
+            $type = 'text';
+        }
+
         return "
         <div>
             <label for='{$key}'>" . utf8_encode(htmlentities($label)) . "</label>
@@ -92,7 +102,7 @@ class Form{
         $value = $this->data->$method();//exemple getName()
         // traiter l'affichate de date
         if($value instanceof DateTimeInterface) {
-            return $value->format('Y-m-d H:i:s');
+            return $value->format('d-m-Y H:i:s');
         }
         return $value;
     }

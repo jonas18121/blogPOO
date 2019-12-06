@@ -7,12 +7,12 @@ class Text{
      * @param int $limit - c'est à cette limite qu'on va devoir couper le texte 
      * @return string - chaine de caractère avec 60 caractères maximun
      */
-    public static function excerpt(string $content, int $limit = 60) : string
+    public static function excerpt(string $content, int $limit = 110) : string
     {
         if(mb_strlen($content) <= $limit){
             return $content;
         }
-        $lastSpace = mb_strpos($content, ' ', $limit);// s'arrête au 1er espace rencontrer après 60 string
+        $lastSpace = mb_strpos($content, ' ', $limit);// s'arrête au 1er espace rencontrer après 110 string
         return substr($content, 0, $lastSpace) . '...';
     }
 }

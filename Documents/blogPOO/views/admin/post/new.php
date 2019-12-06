@@ -3,17 +3,21 @@ $pageTitle       = "Création d'un nouvelle article";
 $titleH1         = "Créer un article";
 $pageDescription = "Ici c'est la page de création d'un nouvelle article";
 
-Auth::check();
+if(!(new AdminModel())->isAuthenticatedAdmin()) header('Location: ' . $router->url('login_user') . '?security=1');
 
 $success    = false;
 $errors     = [];
 $model      = new PostModel($router);
-$userI      = (new UserTable())->findIdAdmin((int)$_SESSION['auth']);
+$admin      = (new AdminTable())->findOne((int)$_SESSION['admin']);
+$adminI     = $admin->getId();
 $pdo        = Database::dbConnect();
 $table      = new PostTable($pdo);
 
-$model->setUserI($userI);
+$model->setAdminI($adminI);
 if(!empty($_POST)){
+    $_POST['name']    = trim($_POST['name']);
+    $_POST['slug']    = trim($_POST['slug']);
+    $_POST['content'] = trim($_POST['content']);
 
     $category   = (new CategoryTable)->oneCategory((int)$_POST['category_id']);
     (is_string($category)) ? header('Location: ' . $router->url('404')) : ''; 
@@ -34,7 +38,7 @@ if(!empty($_POST)){
                 'content'       => $model->getContent(),
                 'created_at'    => $model->getCreatedAt()->format('Y-m-d H:i:s'),
                 'category_id'   => $model->getCategoryId(),
-                'user_i'        => $model->getUserI()
+                'admin_i'       => $model->getAdminI()
             ]);
             $success = true;
             header('Location: ' . $router->url('admin_posts') . '?created=1');
@@ -49,6 +53,15 @@ if(!empty($_POST)){
 }
 $form = new Form($model, $errors);
 ?>
+
+<?php if(isset($_GET['NoCategoryForArticle']) && $_GET['NoCategoryForArticle'] === '1') : ?>
+    <div class="btn btnRed"> 
+        <p>
+            Cette catégorie n'est lier à aucun article pour l'instant. <br>
+            Créer un article pour cette catégorie.
+        </p>
+    </div>
+<?php endif ?>
 
 <?php if(isset($_GET['NoCreatedArticle']) && $_GET['NoCreatedArticle'] === '1') : ?>
     <div class="btn btnGreen"> 

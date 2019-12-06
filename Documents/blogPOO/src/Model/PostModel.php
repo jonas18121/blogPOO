@@ -21,7 +21,7 @@ class PostModel{
     private $category_id;
 
     /** @var int */
-    private $user_i;
+    private $admin_i;
 
     /** @var array $categories - liste des category*/
     private $categories = []; 
@@ -105,9 +105,9 @@ class PostModel{
      * @param void
      * @return int|null
      */
-    public function getUserI() : ?int
+    public function getAdminI() : ?int
     {
-        return $this->user_i;
+        return $this->admin_i;
     }
 
             /*------- SETTER -----------*/
@@ -132,13 +132,13 @@ class PostModel{
         return $this;
     }
 
-    /** setter pour definir l'id  de l'utilisateur qui va avec le poste
+    /** setter pour definir l'id  de l'admin qui va avec le poste
      * @param $id
      * @return self
      */
-    public function setUserI($userI) : self
+    public function setAdminI($adminI) : self
     {
-        $this->user_i = (int)$userI;
+        $this->admin_i = (int)$adminI;
         return $this;
     }
 
@@ -195,6 +195,6 @@ class PostModel{
             return null;
         }
         // class Text
-        return Text::excerpt($this->content,60);
+        return Text::excerpt($this->content,110);
     } 
 }

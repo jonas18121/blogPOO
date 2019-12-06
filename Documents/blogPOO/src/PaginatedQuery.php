@@ -68,7 +68,7 @@ class PaginatedQuery{
             //si la page courante est plus grand que le nombre de pages total, on lance un erreure
             if($currentPage > $pages){
                 $this->router = $router;
-                header('Location: ' . $this->router->url('home'));
+                header('Location: ' . $this->router->url('admin_post_new') . '?NoCategoryForArticle=1');
             }
 
             $offset = $this->perPage * ($currentPage - 1);
@@ -106,7 +106,7 @@ class PaginatedQuery{
             );
             
             $this->items->execute([
-                'user_i' => $userI
+                'admin_i' => $userI
             ]); 
             return $this->items->fetchAll(PDO::FETCH_CLASS, $classMapping);
         }
@@ -165,10 +165,10 @@ HTML;
      * @param int $userI 
      * @return string|null - le lien complèt html et php du boutton page suivant
      */
-    public function nextLinkAdmin(string $link, int $userI) : ?string
+    public function nextLinkAdmin(string $link, int $adminI) : ?string
     {
         $currentPage = $this->getCurrentPage();
-        $pages = $this->getPagesAdmin($userI);
+        $pages = $this->getPagesAdmin($adminI);
         if($currentPage >= $pages) return null;
         $link .= "?page=" . ($currentPage + 1);
         return <<<HTML
@@ -202,11 +202,11 @@ HTML;
      * @param int $userI
      * @return int - compte les pages pour l'utilisateur connecter
      */
-    private function getPagesAdmin(int $userI) : int
+    private function getPagesAdmin(int $adminI) : int
     {
         if($this->count === null){
             $this->count = $this->pdo->prepare($this->queryCount);
-            $this->count->execute(['user_i' => $userI]);
+            $this->count->execute(['admin_i' => $adminI]);
             $this->count = $this->count->fetch();
         }
         return (int)ceil((int)$this->count['COUNT(id)'] / $this->perPage);

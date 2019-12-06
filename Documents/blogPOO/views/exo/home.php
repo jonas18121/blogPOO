@@ -23,7 +23,15 @@ if(isset($_GET['page'])){
         exit();
     }
 }
+
+
 ?>
+
+<?php if(isset($_GET['security']) && $_GET['security'] === '1') : ?>
+    <div class="btn btnRed"> 
+        <p> Cette catégorie n'est lier à aucun article pour l'instant. </p>
+    </div>
+<?php endif ?>
 
 <?php if(!empty($errors)) : ?>
     <div class="btn btnRed">
@@ -34,14 +42,14 @@ if(isset($_GET['page'])){
 <section class="card_home_flex">
     <!-- afficher tous les articles -->
     <?php foreach($posts as $post): ?>
-        <div class="card_home">
-            <h4>Titre <?= $post->getName() ?></h4>
+        <article class="card_home">
+            <h2><?= $post->getName() ?></h2>
             <p><?= $post->getCreatedAt()->format('d F Y') ?></p>
             <p><?= utf8_encode($post->getExcerpt()) ?></p>
             <button class="voir_plus">
                 <a href="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]) ?>">Voir plus</a>
             </button>
-        </div>
+        </article>
     <?php endforeach; ?>
 </section>
 

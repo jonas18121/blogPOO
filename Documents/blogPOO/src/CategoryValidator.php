@@ -41,7 +41,7 @@ class CategoryValidator{
         if(array_key_exists('name',$this->data)){
             if(!empty($this->data['name']) && isset($this->data['name'])){
                 if(!preg_match("/^[a-zA-Z0-9]{2,}(.+)?$/", $this->data['name'])){
-                    $this->errors['name'][] = "on veut pas d'espace en premier caratère dans le Titre";
+                    //$this->errors['name'][] = "on veut pas d'espace en premier caratère dans le Titre";
                     $this->errors['name'][] = "Le Titre doit contenir minimun 2 caratères";
                 }
             }
@@ -53,7 +53,7 @@ class CategoryValidator{
         if(array_key_exists('slug',$this->data)){
             if(!empty($this->data['slug']) && isset($this->data['slug'])){
                 if(!preg_match("/^[a-zA-Z0-9]{2,}(.+)?$/", $this->data['slug'])){
-                    $this->errors['slug'][] = "on veut pas d'espace en premier caratère dans l'URL";
+                    //$this->errors['slug'][] = "on veut pas d'espace en premier caratère dans l'URL";
                     $this->errors['slug'][] = "L'URL doit contenir minimun 2 caratères";
                 }
             }

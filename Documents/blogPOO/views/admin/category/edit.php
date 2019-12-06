@@ -3,7 +3,8 @@ $pageTitle          = "Modification de catégories";
 $titleH1            = "Editer la catégory : {$params['id']}";
 $pageDescription    = "Ici c'est la page de modification de catégories";
 
-Auth::check();
+//Auth::check();
+if(!(new AdminModel())->isAuthenticatedAdmin()) header('Location: ' . $router->url('login_user') . '?security=1');
 
 $pdo        = Database::dbConnect();
 $table      = new CategoryTable($pdo);
@@ -13,6 +14,8 @@ $success    = false;
 $errors     = [];
 
 if(!empty($_POST)){
+    $_POST['name']    = trim($_POST['name']);
+    $_POST['slug']    = trim($_POST['slug']);
 
     $validator = new CategoryValidator($_POST,$table, $model->getId());
     $model->setName($_POST['name'])
@@ -24,6 +27,8 @@ if(!empty($_POST)){
             'slug' => $model->getSlug()
         ], $model->getId());
         $success = true;
+        header('Location: ' . $router->url('admin_categories') . '?edited=1');
+        exit();
     }else{
         $errors  = $validator->errors();
     }

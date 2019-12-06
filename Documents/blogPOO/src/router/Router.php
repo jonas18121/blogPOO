@@ -82,7 +82,7 @@ class Router {
             require_once $this->viewPath . DIRECTORY_SEPARATOR . 'element/layout.php';//on charge le layout
         } 
         catch(SecurityException $e){
-            header('Location: ' . $this->url('login') . '?security=1');
+            header('Location: ' . $this->url('login_user') . '?security=1');
             exit();
         }
         return $this;

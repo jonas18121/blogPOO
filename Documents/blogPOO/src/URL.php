@@ -1,7 +1,5 @@
 <?php
 
-
-
 class URL{
 
     /** vérifie si la page courante est bien un entier

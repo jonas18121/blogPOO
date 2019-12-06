@@ -32,7 +32,7 @@ if($category->getSlug() !== $slug){
 $pageTitle          = "Categorie {$category->getName()}";
 $titleH1            = $pageTitle;
 $pageDescription    = "Ici c'est la page des category";
-$postTable          = new PostTable($pdo);
+$postTable          = new PostTable($pdo, $router);
 [$posts, $pagination] = $postTable->findPaginatedForCategory($id);// ou list($posts, $pagination)
 
 $link = $router->url('category',  ['slug' => $category->getSlug(), 'id' => $id]);
@@ -42,7 +42,7 @@ $link = $router->url('category',  ['slug' => $category->getSlug(), 'id' => $id])
     <!-- afficher tous les articles -->
     <?php foreach($posts as $post): ?>
         <div class="card_home">
-            <h4>Titre <?= $post->getName() ?></h4>
+            <h2><?= $post->getName() ?></h2>
             <p><?= $post->getCreatedAt()->format('d F Y') ?></p>
             <p><?= utf8_encode($post->getExcerpt()) ?></p>
             <button class="voir_plus">

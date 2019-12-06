@@ -3,13 +3,17 @@ $pageTitle       = "Création d'une nouvelle categorie";
 $titleH1         = "Créer une nouvelle categorie";
 $pageDescription = "Ici c'est la page de création d'une nouvelle categorie";
 
-Auth::check();
+//Auth::check();
+if(!(new AdminModel())->isAuthenticatedAdmin()) header('Location: ' . $router->url('login_user') . '?security=1');
 
 $success    = false;
 $errors     = [];
 $model      = new CategoryModel();
 
 if(!empty($_POST)){
+    $_POST['name']    = trim($_POST['name']);
+    $_POST['slug']    = trim($_POST['slug']);
+
     $pdo        = Database::dbConnect();
     $table      = new CategoryTable($pdo);
     $validator  = new CategoryValidator($_POST, $table);

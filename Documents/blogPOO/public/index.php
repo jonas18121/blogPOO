@@ -3,7 +3,7 @@ require 'autoload.php';
 spl_autoload_register('autoload');
 
 /* on va efficher le temps que met le fichier a charger */
-//define('DEBUG_TIME', microtime(true));
+define('DEBUG_TIME', microtime(true));
 
 //réécrire l'url sans le paramètre ?page=1
 if(isset($_GET['page']) && $_GET['page'] === '1'){
@@ -22,10 +22,6 @@ $router = new Router(dirname(__DIR__) . '/views');
 
 // 1 route dans url, 2 chemin du fichier php = views/exo/home.php, 3 nom de la page
 $router
-        //Blog//
-    ->get('/blog/category/[*:slug]/[i:id]', 'exo/blog/category/categoryShow', 'category')
-    ->get('/blog/article/[*:slug]/[i:id]', 'exo/blog/show', 'propositionCategory')
-    ->get('/blog/[*:slug]/[i:id]', 'exo/blog/show', 'post')
         //ADMIN - POST//
     ->match('/admin/post/new','admin/post/new', 'admin_post_new')
     ->match('/admin/post/[i:id]','admin/post/edit', 'admin_post')
@@ -37,13 +33,30 @@ $router
     ->post('/admin/category/[i:id]/delete','admin/category/delete', 'admin_category_delete')
     ->get('/admin/categories','admin/category/index', 'admin_categories')
         //ADMIN//
-    ->match('/register', 'auth/register', 'register')
-    ->match('/login', 'auth/login', 'login')
-    ->post('/logout', 'auth/logout', 'logout')
-    ->post('/delete_user', 'auth/delete', 'delete_user')
+    ->match('/admin/register', 'admin/authAdmin/register', 'register_admin')
+    ->match('/admin/login', 'admin/authAdmin/login', 'login_admin')
+    ->post('/admin/logout', 'admin/authAdmin/logout', 'logout_admin')
+    ->post('/admin/delete', 'admin/authAdmin/delete', 'delete_admin')
+
+        //USER//
+    ->match('/user/register', 'user/authUser/register', 'register_user')
+    ->match('/user/login', 'user/authUser/login', 'login_user')
+    ->post('/user/logout', 'user/authUser/logout', 'logout_user')
+    ->post('/user/delete', 'user/authUser/delete', 'delete_user')
+
+        // COMMENT//
+    ->match('/blog/[*:slug_post]/[i:id_post]/comment/[i:id]','comment/edit', 'comment_edit')
+    ->get('/blog/[*:slug_post]/[i:id_post]/comment/[i:id]/delete','comment/delete', 'comment_delete')
+    ->match('/blog/comment/new/[*:slug_post]/[i:id_post]','comment/new', 'comment_new')
+    //->get('/blog/comments','comment/index', 'comments')
+    
+        //Blog//
+    ->get('/blog/category/[*:slug]/[i:id]', 'exo/blog/category/categoryShow', 'category')
+    ->get('/blog/article/[*:slug]/[i:id]', 'exo/blog/show', 'propositionCategory')
+    ->match('/blog/[*:slug]/[i:id]', 'exo/blog/show', 'post')
+
         //PUBLIC//
     ->get('/contact','exo/contacte', 'contacte')
-    ->get('/typages','exo/typage', 'typage')
     ->get('/errors','404', '404')
     ->get('/','exo/home', 'home')
     ->run();

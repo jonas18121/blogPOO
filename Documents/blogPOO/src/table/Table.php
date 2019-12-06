@@ -123,4 +123,57 @@ abstract class Table{
             throw new Exception("Impossible de modifier l'élément {$data->getId()} dans la table {$this->table}. ");
         }
     }
+
+    /** selectionne tous ce qu'il y a dans une table selectionner à partir de son $email lors de la connexion
+     * @param string $email - l'email que l'administrateur a entrer dans le formulaire
+     * @return $result - retourne une class ou lance une exception
+     */
+    public function login(string $email)
+    {
+        $query = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE email = :email ");
+        $query->execute(['email' => $email]);
+        $query->setFetchMode(PDO::FETCH_CLASS, $this->class);
+        $result = $query->fetch();
+        if($result === false){
+            throw new NotFoundException("{$this->table}", $email);
+        }
+        return $result;
+    }
+
+    /** inscription
+     * @param array $data - donnée entrer par l'administrateur
+     * @return void|throw 
+     */
+    public function register(array $data) : void
+    {
+            $sqlFields = [];
+            // les paramètres seront dynamiques
+            foreach($data as $key => $value){
+                $sqlFields[] = "$key = :$key";// exemple 'name' = ':name'
+            } 
+            $sql = "INSERT INTO {$this->table} SET " . implode(', ', $sqlFields);
+            $item = $this->pdo->prepare($sql);
+            $item = $item->execute($data);
+            if($item === false){
+                throw new Exception("Impossible de créer un compte dans la table {$this->table}. ");
+            }
+    }
+
+    /** controle si le mail existe déjà dans la bdd
+     * @param string $email - l'email que l'utilisateur a entrer dans le formulaire
+     * @return string|throw $email - retoune le mail ou lance une erreur s'il existe déjà
+     */
+    public function findEmail(string $email) : string
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE email = :email ";
+        $itemExist = $this->pdo->prepare($sql);
+        $itemExist->execute([
+            ':email' => $email
+        ]);
+        $itemExist = $itemExist->fetchAll();
+        if($itemExist){
+            throw new Exception(("Un utilisateur existe déjà avec cet email."));
+        }
+        return $email;
+    }
 }

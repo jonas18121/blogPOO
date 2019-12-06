@@ -7,9 +7,9 @@ $pageDescription = "Ici c'est la page d'administration";
 if(!(new AdminModel())->isAuthenticatedAdmin()) header('Location: ' . $router->url('login_user') . '?security=1');
 
 $pdo    = Database::dbConnect();
-$table  = new PostTable($pdo, $router);
-$link   = $router->url('admin_posts');
-[$items, $pagination] = $table->findPaginatedAdmin($_SESSION['admin']);
+$commentTable  = new CommentTable($pdo, $router);
+$link   = $router->url('admin_comments');
+[$items, $pagination] = $commentTable->findPaginatedAdmin($_SESSION['admin']);
 
 //réécrire l'url sans un paramètre avec ?page=[a-zA-Z] ou ?page=[0-9]{1,}[a-zA-Z]
 if(isset($_GET['page'])){
@@ -55,13 +55,11 @@ if(isset($_GET['page'])){
 <div class="responsive_table">
 <table class="table">
     <thead>
-        <tr>
-            <th>#</th>
-            <th>Titre</th>
-            <th>
-                <a href="<?= $router->url('admin_post_new') ?>" class="btn" >Créer un article</a>
-            </th>
-        </tr>
+        <th>#</th>
+        <th>Titre</th>
+        <th>
+            <a href="<?= $router->url('admin_post_new') ?>" class="btn" >Créer un article</a>
+        </th>
     </thead>
     <tbody>
         <?php foreach($items as $item) : ?>

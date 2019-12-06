@@ -1,0 +1,75 @@
+AddDefaultCharset "utf-8"
+
+##
+## INTERDIT l'accès au fichier .htaccess
+##
+<Files .htaccess>
+    order allow,deny 
+    deny form all 
+</Files>
+
+## Optionnel
+## Mettre le serveur sur le fuseau horaire de Paris
+##
+setEnv TZ Europe/Paris
+
+##
+## Empêche de fouiller à la racine
+##
+Options All -Indexes
+
+##
+## Mettre par défaut l'affichage
+##
+<FilesMatch "\.(htm|html|css|php)$">
+    AddDefaultCharset UTF-8
+    DefaultLanguage fr-fr
+</FilesMatch>  
+
+##
+## Pour réécrire les nom des pages
+##
+
+Options +FollowSymLinks -MultiViews
+
+RewriteEngine On
+RewriteBase /public/
+RewriteCond %{REQUEST_URI} !\.(.?css|jpe?g|gif|png)$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-f [OR]
+RewriteCond %{REQUEST_FILENAME} !-d
+
+DirectoryIndex index.php
+RewriteRule . index.php [L]
+# RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# Ne pas oublier d'enlever les # pour forcer les www (Pb en localhost)
+# Redirect non-www to www:
+# RewriteCond %{HTTP_HOST} !^www\. [NC]
+# RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
+
+# Forcer le https
+# Redirect http to https:
+# %{HTTPS} off
+# RewriteRule (.*) https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Enlever les slash
+# RewriteEngine On
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^([^/]+)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Enlever l'extention .php
+# RewriteCond %{THE_REQUEST} ^(.+)\.php([#?][^\ ]*)?\ HTTP/
+# RewriteRule ^(.+)\.php$ http://%{HTTP_HOST}/$1 [R=301,L]
+
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteCond %{REQUEST_FILENAME}\.php -f
+# RewriteRule ^(.*)$ $1.php [L]
+
+# D'autres règles
+# RewriteRule ^([0-9]+)$ ?page=$1 [L]
+
+# RewriteRule ^contacte$   contacte.php [L]
+# RewriteRule ^exo/typage$   exo/typage.php [L]
+# RewriteRule ^error/404/$   error/404.php [L]
+
+

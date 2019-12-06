@@ -3,7 +3,8 @@ $pageTitle       = "Administration";
 $titleH1         = 'Gestion des categories';
 $pageDescription = "Ici c'est la page d'administration";
 
-Auth::check();
+//Auth::check();
+if(!(new AdminModel())->isAuthenticatedAdmin()) header('Location: ' . $router->url('login_user') . '?security=1');
 
 $pdo   = Database::dbConnect();
 $table = new CategoryTable($pdo);
@@ -12,9 +13,15 @@ $model = (new CategoryTable($pdo))->all();
 $link  = $router->url('admin_posts');
 ?>
 
+<?php if(isset($_GET['edited']) && $_GET['edited'] === '1') : ?>
+    <div class="btn btnGreen"> 
+        <p>La catégorie à bien été modifier</p>
+    </div>
+<?php endif ?>
+
 <?php if(isset($_GET['created']) && $_GET['created'] === '1') : ?>
     <div class="btn btnGreen">
-        <p>L'article à bien été enregistrer</p>
+        <p>La catégorie à bien été enregistrer</p>
     </div>
 <?php endif ?>
 
@@ -27,12 +34,14 @@ $link  = $router->url('admin_posts');
 <div class="responsive_table">
 <table class="table">
     <thead>
-        <th>#</th>
-        <th>Titre</th>
-        <th>URL</th>
-        <th>
-            <a href="<?= $router->url('admin_category_new') ?>" class="btn" >Créer une nouvelle category</a>
-        </th>
+        <tr>
+            <th>#</th>
+            <th>Titre</th>
+            <th>URL</th>
+            <th>
+                <a href="<?= $router->url('admin_category_new') ?>" class="btn" >Créer une nouvelle category</a>
+            </th>
+        </tr>
     </thead>
     <tbody>
         <?php foreach($model as $item) : ?>
@@ -60,7 +69,6 @@ $link  = $router->url('admin_posts');
             </td>
         </tr>
         <?php endforeach ?>
-        <tr></tr>
     </tbody>
 </table>
 </div>

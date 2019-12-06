@@ -1,6 +1,6 @@
 <?php
 
-class UserModel{
+class AdminModel{
 
     /** @var int $id */
     private $id;
@@ -29,7 +29,7 @@ class UserModel{
         return $this->id;
     }
 
-    /** afficher le nom de l'utilisateur
+    /** afficher le nom de l'administrateur
      * @param void
      * @return string|null 
     */        
@@ -38,7 +38,7 @@ class UserModel{
         return $this->name;
     }
 
-    /** afficher le mail de l'utilisateur
+    /** afficher le mail de l'administrateur
      * @param void
      * @return string|null 
     */        
@@ -47,7 +47,7 @@ class UserModel{
         return $this->email;
     }
 
-    /** afficher le mot de passe de l'utilisateur
+    /** afficher le mot de passe de l'administrateur
      * @param void
      * @return string|null 
     */        
@@ -56,7 +56,7 @@ class UserModel{
         return $this->password;
     }
 
-    /** afficher le 2èmes mot de passe de l'utilisateur
+    /** afficher le mot de passe de l'administrateur
      * @param void
      * @return string|null 
     */        
@@ -77,7 +77,7 @@ class UserModel{
         return $this;
     }
 
-    /** définir le nom de l'utilisateur
+    /** définir le nom de l'administrateur
      * @param string $username
      * @return self
     */        
@@ -87,7 +87,7 @@ class UserModel{
         return $this;
     }
 
-    /** définir le nom de l'utilisateur
+    /** définir le nom de l'administrateur
      * @param string $username
      * @return self
     */        
@@ -97,7 +97,7 @@ class UserModel{
          */
         if(isset($email) && filter_var($email, FILTER_VALIDATE_EMAIL) !== false){
             
-            $table = new UserTable(); 
+            $table = new AdminTable(); 
             $email = $table->findEmail($email);
             $this->email = $email;
             return $this;
@@ -105,7 +105,7 @@ class UserModel{
         throw new Exception(("votre mail n'est pas valide.")); 
     }
 
-    /** définir le mot de passe de l'utilisateur
+    /** définir le mot de passe de l'administrateur
      * @param string $password
      * @return self
     */        
@@ -118,7 +118,7 @@ class UserModel{
         return $this;
     }
 
-    /** définir le 2èmes mot de passe de l'utilisateur
+    /** définir le mot de passe de l'administrateur
      * @param string $password
      * @return self
     */        
@@ -126,18 +126,21 @@ class UserModel{
     {
         /* si le mail n'existe pas déjà dans la bdd lors de l'inscription, c'est bon , 
         on peut hashé le mot de passe */
-        $passwordHashed  = password_hash($password2, PASSWORD_DEFAULT);
+        $passwordHashed = password_hash($password2, PASSWORD_DEFAULT);
         $this->password2 = $passwordHashed;
         return $this;
     }
 
-    /** on verifie si la session user existe
+    /** on verifie si la session admin existe
      *  @return bool
     */
-    public function isAuthenticatedUser() : bool
+    public function isAuthenticatedAdmin() : bool
     {
-        if(array_key_exists('user', $_SESSION)) {
-            if (!empty($_SESSION['user']) && isset($_SESSION['user'])) {
+        if(session_status() === PHP_SESSION_NONE){
+            session_start();
+        }
+        if(array_key_exists('admin', $_SESSION)) {
+            if (!empty($_SESSION['admin']) && isset($_SESSION['admin'])) {
                 return true;
             }
         }

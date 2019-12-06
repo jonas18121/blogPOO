@@ -13,7 +13,6 @@ class PostTable extends Table {
 
     public function __construct($pdo = null, $router = null){
         parent::__construct();
-
         if(isset($router) && $router !== null){
             $this->router = $router;
         }
@@ -67,35 +66,35 @@ class PostTable extends Table {
      * @param int $userI
      * @return array - renvois [$posts, $paginatedQuery]
      */
-    public function findPaginatedAdmin(int $userI) : array
+    public function findPaginatedAdmin(int $adminI) : array
     {
         $paginatedQuery = new PaginatedQuery(
             "SELECT * 
             FROM {$this->table} 
-            WHERE user_i = :user_i
+            WHERE admin_i = :admin_i
             ORDER BY created_at DESC",
-            "SELECT COUNT(id) FROM {$this->table} WHERE user_i = :user_i",
+            "SELECT COUNT(id) FROM {$this->table} WHERE admin_i = :admin_i",
             $this->pdo
         );
         /** @var PostModel[] */
-        $posts = $paginatedQuery->getItemsAdmin($this->class,$userI, $this->router);
+        $posts = $paginatedQuery->getItemsAdmin($this->class,$adminI, $this->router);
 
         return [$posts, $paginatedQuery]; 
     }
 
-    /** selectionne seulement le user_i de la table post selectionner à partir de user_i
+    /** selectionne seulement le admin_i de la table post selectionner à partir de admin_i
      * @param int $userI
      * @return array|string $result - retourne une class ou lance une exception
      */
-    public function findOnlyUserI (int $userI) 
+    public function findOnlyUserI (int $adminI) 
     {
-        $sql = "SELECT user_i FROM {$this->table} WHERE user_i = :user_i";
+        $sql = "SELECT admin_i FROM {$this->table} WHERE admin_i = :admin_i";
         $query = $this->pdo->prepare($sql);
-        $query->execute(['user_i' => $userI]);
+        $query->execute(['admin_i' => $adminI]);
         $query->setFetchMode(PDO::FETCH_CLASS, $this->class);
         $result = $query->fetch();
         if($result === false){
-            return $errors = 'pas de user_i trouver';
+            return $errors = 'pas de admin_i trouver';
         }
         return $result;
     }
@@ -104,30 +103,49 @@ class PostTable extends Table {
      * @param int $userI
      * @return void|throw
      */
-    public function deleteAllPostAdmin(int $userI) : void
+    public function deleteAllPostAdmin(int $adminI) : void
     {
-        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE user_i = :user_i");
-        $ok = $query->execute(['user_i' => $userI]);
+        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE admin_i = :admin_i");
+        $ok = $query->execute(['admin_i' => $adminI]);
         if($ok === false){
-            throw new Exception("Impossible de supprimer les enregistrement {$userI} dans la table {$this->table}. ");
+            throw new Exception("Impossible de supprimer les enregistrement {$adminI} dans la table {$this->table}. ");
         }
     }
 
-    /** selectionne tous ce qu'il y a dans une table selectionner à partir de son id et l'id de l'utilisateur
+    /** selectionne un article à partir de son id et l'id de l'admin
      * @param int $id
-     * @param int $userI
+     * @param int $adminI
      * @return $result - retourne une class ou lance une exception
      */
-    public function findPostUser (int $id, int $userI) 
+    public function findPostAdmin (int $id, int $adminI) 
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = :id AND user_i = :user_i";
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id AND admin_i = :admin_i";
         $query = $this->pdo->prepare($sql);
         $query->execute([
             'id' => $id,
-            'user_i' => $userI
+            'admin_i' => $adminI
             ]);
         $query->setFetchMode(PDO::FETCH_CLASS, $this->class);
         $result = $query->fetch();
+        if($result === false){
+            return $errors = 'la modification est incorrecte';
+        }
+        return $result;
+    }
+
+    /** selectionne tous les articles à partir de l'id de l'admin
+     * @param int $adminI
+     * @return $result - retourne une class ou lance une exception
+     */
+    public function findAllPostAdmin (int $adminI) 
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE admin_i = :admin_i";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([
+            'admin_i' => $adminI
+            ]);
+        $query->setFetchMode(PDO::FETCH_CLASS, $this->class);
+        $result = $query->fetchAll();
         if($result === false){
             return $errors = 'la modification est incorrecte';
         }

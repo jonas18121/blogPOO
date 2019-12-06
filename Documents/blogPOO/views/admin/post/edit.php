@@ -3,25 +3,29 @@ $pageTitle          = "Modification d'article";
 $titleH1            = "Editer l'article : {$params['id']}";
 $pageDescription    = "Ici c'est la page de modification d'article";
 
-Auth::check();
+//Auth::check();
+if(!(new AdminModel())->isAuthenticatedAdmin()) header('Location: ' . $router->url('login_user') . '?security=1');
 
-$id         = (int)$params['id'];
-$pdo        = Database::dbConnect();
-$table      = new PostTable($pdo);
-$model      = $table->findOne($id);
+$id          = (int)$params['id'];
+$pdo         = Database::dbConnect();
+$table       = new PostTable($pdo);
+$model       = $table->findOne($id);
 (is_string($model)) ? header('Location: ' . $router->url('404')) : '';
-$success    = false;
-$errors     = []; 
-$user       = (new UserTable())->findOne((int)$_SESSION['auth']);
-$postUser   = $table->findPostUser($id, $user->getId());
+$success     = false;
+$errors      = []; 
+$admin       = (new AdminTable())->findOne((int)$_SESSION['admin']);
+$postAdmin   = $table->findPostAdmin($id, $admin->getId());
 
-if(isset($postUser) && is_string($postUser)){
+if(isset($postAdmin) && is_string($postAdmin)){
     header('Location: '. $router->url('admin_posts'));
 }
 
 if(!empty($_POST)){
+    $_POST['name']    = trim($_POST['name']);
+    $_POST['slug']    = trim($_POST['slug']);
+    $_POST['content'] = trim($_POST['content']);
 
-    $category  = (new CategoryTable)->oneCategory((int)$_POST['category_id']);
+    $category  = (new CategoryTable())->oneCategory((int)$_POST['category_id']);
     (is_string($category)) ? header('Location: ' . $router->url('404')) : '';
     $validator = new PostValidator($_POST,$table, $category, $model->getId());
    
@@ -40,9 +44,11 @@ if(!empty($_POST)){
                 'content'       => $model->getContent(),
                 'created_at'    => $model->getCreatedAt()->format("Y-m-d H:i:s"),
                 'category_id'   => $model->getCategoryId(),
-                'user_i'        => $model->getUserI()
+                'admin_i'        => $model->getAdminI()
             ], $model->getId());
             $success = true;
+            header('Location: ' . $router->url('admin_posts') . '?edited=1');
+            exit();
         }
         catch(NotFoundException $e){
             $errors['errors'] = "L'identifiant ou le mot de passe est incorrect ";

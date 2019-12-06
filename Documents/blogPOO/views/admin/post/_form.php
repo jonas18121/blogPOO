@@ -10,7 +10,7 @@ $category   = $table->all();
         <?= $form->textarea('content', 'Contenu'); ?>
         <?= $form->inpute('created_at', 'Date de publication'); ?>
         <?= $form->select('category_id', 'Category', $category); ?>
-        <?= $form->inpute('user_i'); ?>
+        <?= $form->inpute('admin_i'); ?>
         <input type="submit" value="<?= ($model->getId() !== null) ? 'Modifier' : 'Créer' ?> ">
     </form>
 </div>
