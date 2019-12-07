@@ -16,7 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <link rel="stylesheet" type="text/css" media="all" href="/css/style.css">
     </head>
     <body>
-        <header>
+        <header >
             <div class="topnav" id="myTopnav">
                 <a href="<?= $router->url('home') ?>" class="active">BlogPOO</a>
                 <a href="<?= $router->url('contacte') ?>">Contact</a>
