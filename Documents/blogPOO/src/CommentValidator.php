@@ -59,7 +59,7 @@ class CommentValidator{
     {
         if(array_key_exists('content',$this->data)){
             if(!empty($this->data['content']) && isset($this->data['content'])){
-                if(!preg_match("/^[a-zA-Z0-9éèêôâïà]{1,}(.+)?$/", $this->data['content'])){
+                if(!preg_match("/^[a-zA-Z0-9éèêôâïà]{1,}(.+)?$/s", $this->data['content'])){
                     $this->errors['content'][] = "Le contenu doit contenir minimun 1 caratère normal";
                 }
             }

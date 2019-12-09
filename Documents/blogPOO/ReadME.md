@@ -25,16 +25,12 @@ Un visiteur connecter peut lire tous les articles qui ont été poster sur ce bl
 Vous pouvez vous connecter en `créant un compte`.
 
 ### CONNEXION : *{utilisateurs}*
-Sinon vous pouvez vous connecter avec ces noms d'utilisateurs avec leurs mails et leurs mots de passe:
+Sinon vous pouvez vous connecter avec ces noms d'utilisateurs avec leurs adresses et leurs mots de passe:
 
                             test1   test1@gmail.com     test1
                             youmi   youmi@gmail.com     youmi
                             kanne   kanne@gmail.com     kanne
 
-### CONNEXION : *{admin}*
-Vous pouvez vous connecter avec cette url /admin/login avec ce nom d'admin avec son mail et son mots de passe:
-
-                            polo    polo@gmail.com      polo
 
 ## SITE : *{evolutive}*
 Bien sûr, ce blog à été fait de manière à ce que son code source soit évolutive. 

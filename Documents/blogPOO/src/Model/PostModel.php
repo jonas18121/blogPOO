@@ -53,7 +53,7 @@ class PostModel{
      */
     public function getFormattedContent() : ?string
     {
-        return nl2br(utf8_encode($this->content));
+        return nl2br($this->content);
     }
 
     /** affiche la date sous forme DateTime
