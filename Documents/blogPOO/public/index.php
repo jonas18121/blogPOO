@@ -3,7 +3,7 @@ require 'autoload.php';
 spl_autoload_register('autoload');
 
 /* on va efficher le temps que met le fichier a charger */
-define('DEBUG_TIME', microtime(true));
+//define('DEBUG_TIME', microtime(true));
 
 //réécrire l'url sans le paramètre ?page=1
 if(isset($_GET['page']) && $_GET['page'] === '1'){

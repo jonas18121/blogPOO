@@ -57,9 +57,9 @@ class PostValidator{
 
         if(array_key_exists('name',$this->data)){
             if(!empty($this->data['name']) && isset($this->data['name'])){
-                if(!preg_match("/^[a-zA-Z0-9éèêôâïà]{2,}(.+)?$/", $this->data['name'])){
+                if(!preg_match("/^[a-zA-Z0-9éèêôâïà]{1,}(.+)?$/", $this->data['name'])){
                     //$this->errors['name'][] = "on veut pas d'espace en premier caratère dans le Titre";
-                    $this->errors['name'][] = "Le Titre doit contenir minimun 2 caratères";
+                    $this->errors['name'][] = "Le Titre doit contenir minimun 1 caratère normal";
                 }
             }
             if(empty($this->data['name'])){
@@ -69,9 +69,9 @@ class PostValidator{
         
         if(array_key_exists('slug',$this->data)){
             if(!empty($this->data['slug']) && isset($this->data['slug'])){
-                if(!preg_match("/^[a-zA-Z0-9éèêôâïà]{2,}(.+)?$/", $this->data['slug'])){
+                if(!preg_match("/^[a-zA-Z0-9éèêôâïà]{1,}(.+)?$/", $this->data['slug'])){
                     //$this->errors['slug'][] = "on veut pas d'espace en premier caratère dans l'URL";
-                    $this->errors['slug'][] = "L'URL doit contenir minimun 2 caratères";
+                    $this->errors['slug'][] = "L'URL doit contenir minimun 1 caratère normal";
                 }
             }
             if(empty($this->data['slug'])){
@@ -81,7 +81,7 @@ class PostValidator{
 
         if(array_key_exists('content',$this->data)){
             if(!empty($this->data['content']) && isset($this->data['content'])){
-                if(!preg_match("/^[a-zA-Z0-9éèêôâïà]{1,}(.+)?$/", $this->data['content'])){
+                if(!preg_match("/^[a-zA-Z0-9éèêôâïà]{1,}(.+)?$/s", $this->data['content'])){
                     //$this->errors['content'][] = "on veut pas d'espace en premier caratère dans le contenu";
                     $this->errors['content'][] = "Le contenu doit contenir minimun 1 caratère normal";
                 }

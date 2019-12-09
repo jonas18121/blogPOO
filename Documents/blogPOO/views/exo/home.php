@@ -45,7 +45,7 @@ if(isset($_GET['page'])){
         <article class="card_home">
             <h2><?= $post->getName() ?></h2>
             <p><?= $post->getCreatedAt()->format('d F Y') ?></p>
-            <p><?= utf8_encode($post->getExcerpt()) ?></p>
+            <p><?= $post->getExcerpt() ?></p>
             <button class="voir_plus">
                 <a href="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]) ?>">Voir plus</a>
             </button>
